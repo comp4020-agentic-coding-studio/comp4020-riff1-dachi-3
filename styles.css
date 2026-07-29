@@ -1,16 +1,191 @@
-body {
-  margin: 0;
-  padding: 2rem;
-  font-family: system-ui, sans-serif;
-  line-height: 1.6;
-  color: #1a1a1a;
+:root {
+  --ink: #3a0e0e;
+  --seal: #7a1f1f;
+  --gold: #a8791a;
+  --parchment: #f6ecd9;
+  --parchment-dark: #ead9b8;
+  --paper: #fffaf0;
 }
 
-main {
-  max-width: 40rem;
-  margin: 0 auto;
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  background-color: var(--parchment);
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--parchment-dark) 0,
+    var(--parchment-dark) 2px,
+    transparent 2px,
+    transparent 16px
+  );
+  line-height: 1.6;
 }
 
 a {
-  color: #0b5fff;
+  color: var(--seal);
+}
+
+a:visited {
+  color: #55365a;
+}
+
+/* the marquee every good shrine deserves */
+.ticker {
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: 3px double var(--seal);
+  border-bottom: 3px double var(--seal);
+  background: var(--ink);
+}
+
+.ticker-track {
+  display: inline-block;
+  margin: 0;
+  padding: 0.4rem 0 0.4rem 100%;
+  color: var(--gold);
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  animation: ticker 26s linear infinite;
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.blink {
+  animation: blink 1.6s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.15;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track,
+  .blink {
+    animation: none;
+  }
+}
+
+header nav[aria-label="Primary"] {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1rem;
+  background: var(--seal);
+}
+
+header nav[aria-label="Primary"] a {
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  border: 2px outset var(--parchment-dark);
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+header nav[aria-label="Primary"] a:hover,
+header nav[aria-label="Primary"] a:focus {
+  border-style: inset;
+}
+
+main {
+  max-width: 42rem;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--paper);
+  border: 4px double var(--seal);
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+h1 {
+  margin-top: 0;
+  color: var(--seal);
+  font-size: 1.8rem;
+  letter-spacing: 0.03em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+h2 {
+  color: var(--seal);
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 0.2rem;
+}
+
+.subtitle {
+  margin-top: 0;
+  color: var(--gold);
+  font-style: italic;
+  text-align: center;
+}
+
+.divider {
+  margin: 1.5rem 0;
+  color: var(--gold);
+  letter-spacing: 0.5rem;
+  text-align: center;
+}
+
+.counter {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.3rem 0.6rem;
+  border: 2px solid var(--gold);
+  background: #111;
+  color: #4dff4d;
+  font-family: "Courier New", monospace;
+  letter-spacing: 0.2rem;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.badges li {
+  padding: 0.35rem 0.7rem;
+  border: 2px ridge var(--gold);
+  background: var(--parchment-dark);
+  font-family: "Courier New", monospace;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.5rem 1rem;
+  border-left: 4px solid var(--gold);
+  background: var(--parchment);
+  font-style: italic;
+}
+
+footer {
+  max-width: 42rem;
+  margin: 0 auto 3rem;
+  padding: 0 2rem;
+  color: var(--seal);
+  font-size: 0.9rem;
+  text-align: center;
 }
