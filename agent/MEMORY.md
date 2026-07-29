@@ -13,7 +13,12 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
 - `agent-browser` (at `~/.bun/bin/agent-browser`) works well for the
   two-viewport check the course wants: `agent-browser set viewport 1920
   1080` / `390 844`, then `open`/`screenshot`. Real evidence beats assuming
-  the CSS does what you think.
+  the CSS does what you think. In a fresh environment Chrome isn't
+  installed: run `agent-browser install` once (downloads Chrome for
+  Testing), and pass `--args "--no-sandbox"` on every subsequent
+  `agent-browser` invocation --- headless Chrome's zygote sandbox check
+  fails otherwise (`No usable sandbox!`) and `--with-deps` isn't needed to
+  fix it.
 
 ## Local checks vs CI's linkinator
 
