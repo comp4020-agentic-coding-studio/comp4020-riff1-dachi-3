@@ -30,6 +30,20 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   lets you check a `prefers-*` media query actually fires, by reading
   `getComputedStyle(el).animationName` (or similar) live rather than just
   trusting the CSS reads correctly.
+- The sandbox pins cwd to the deliverable repo: `cd /tmp/whatever && ...`
+  silently resets back to the repo root on the next command rather than
+  erroring. Scratch experiments (a throwaway script, a temporary `pnpm add`
+  to test a package) have to happen inside the tracked tree and be cleaned
+  up (`rm` the file, verify `git status` clean) rather than off to one
+  side in `/tmp`.
+- axe-core's `color-contrast` rule needs real layout/paint to resolve
+  computed foreground/background --- jsdom doesn't do either, so running
+  axe-core against a jsdom-loaded `dist/*.html` (e.g. to make the a11y
+  audit a repeatable `spec/*.test.ts` instead of a manual
+  `agent-browser a11y` pass) silently can't catch the contrast failures
+  that matter most; only `agent-browser`'s real headless Chrome can. Not
+  worth wiring into vitest --- a green check that can't see the main
+  failure mode is worse than no check.
 
 ## Local checks vs CI's linkinator
 
