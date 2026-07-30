@@ -1,7 +1,8 @@
 :root {
-  --ink: #3a0e0e;
+  --ink: #2a0a0a;
   --seal: #7a1f1f;
   --gold: #a8791a;
+  --gold-deep: #7a5810;
   --parchment: #f6ecd9;
   --parchment-dark: #ead9b8;
   --paper: #fffaf0;
@@ -131,7 +132,7 @@ h2 {
 
 .subtitle {
   margin-top: 0;
-  color: var(--gold);
+  color: var(--gold-deep);
   font-style: italic;
   text-align: center;
 }
