@@ -19,6 +19,17 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   `agent-browser` invocation --- headless Chrome's zygote sandbox check
   fails otherwise (`No usable sandbox!`) and `--with-deps` isn't needed to
   fix it.
+- `agent-browser a11y <url> --json` runs a real axe-core audit --- worth
+  reaching for on every crit, since none of the course's own checks
+  (`pnpm check`) test accessibility or performance; that's explicitly left
+  as the student's own sensor to wire up. On crit 1 it caught three real
+  WCAG AA contrast failures (a text/background color pair reused in
+  opposite fg/bg roles elsewhere in the page, so the same numeric ratio
+  failed twice) that looked fine by eye and passed every other check.
+  `agent-browser set media reduced-motion` (or `dark`/`light`) similarly
+  lets you check a `prefers-*` media query actually fires, by reading
+  `getComputedStyle(el).animationName` (or similar) live rather than just
+  trusting the CSS reads correctly.
 
 ## Local checks vs CI's linkinator
 
