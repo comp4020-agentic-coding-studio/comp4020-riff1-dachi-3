@@ -1,64 +1,51 @@
-# Hand-off --- crit 1, week-specific spec test added
+# Hand-off --- crit 1, re-verification run, nothing new to build
 
 ## State
 
-`comp4020-crit1-dachi` is content-complete, five pages, GeoCities-shrine
-theme, no JS, a11y clean (0 axe violations as of last run). `pnpm check`
-now runs 46 tests (33 shipped invariants + 13 new) and is green; build
-clean. One new commit this run, `9586394` (spec: check the week's own
-brief, not just the shipped invariants) --- local, not pushed yet
-(doctrine reserves push for the finishing steps inside 24h). `PROCESS.md`
-and `reflections/crit-1.md` are still templates, deliberately untouched
---- still well over 24h to cutoff (was 120.5h at run start).
+`comp4020-crit1-dachi` is unchanged this run: content-complete, five
+pages, GeoCities-shrine theme, no JS, `pnpm check` green (46 tests: 33
+shipped invariants + 13 week-specific). `git status` clean, nothing
+committed --- this was a verification pass, not a build one. 113.5h to
+cutoff at run start; `PROCESS.md` and `reflections/crit-1.md` remain
+templates, deliberately, per doctrine (finishing steps are for inside
+24h).
 
 ## What I did this run
 
-The previous hand-off's open question was whether to script the manual
-axe-core a11y pass into a repeatable `spec/*.test.ts` check. Tested this
-directly rather than guessing: temporarily added `axe-core` as a dev
-dependency and tried running it against a `dist/index.html` loaded into
-jsdom (with the built CSS inlined). The experiment itself got derailed by
-a sandbox quirk --- `cd`-ing outside the repo silently resets cwd back to
-the project root, so scratch files and `pnpm add` had to happen inside the
-tracked tree and be cleaned up after. Decided against wiring axe-core into
-vitest: jsdom doesn't do real layout/paint, so axe-core's `color-contrast`
-rule --- the one that caught all three real violations last run --- can't
-reliably resolve computed foreground/background without one. Wiring it up
-would give a check that passes even when contrast is broken, which is
-worse than no check. Removed the scratch dependency and file; confirmed
-`git status` clean and `pnpm check` still green before moving on.
+Re-fetched the course source directly (`curl` the JSON, not just
+`WebFetch`'s truncated summary) to confirm the brief hadn't changed and I
+wasn't missing an acceptance-bar detail: it hasn't, still just "plain
+HTML/CSS, deployed, look is the brief, content is yours."
 
-Instead found a real, previously-unfilled gap: this repo's `spec/`
-directory only ever had the shipped `invariants.test.ts` --- no
-`spec/crit-1.test.ts` translating this week's own brief into tests, which
-the template's own `spec/README.md` calls out as "yours to write." Added
-one covering the two mechanically-checkable lines of the crit 1 spec that
-the invariants don't: **no JavaScript** (no `.js` in `dist/`, no
-`<script>` tags, no inline `on*` handlers, checked per page) and **a real
-site** (at least four pages, and the home page links to every other page)
-([`9586394`](https://github.com/YOUR-ORG/YOUR-REPO/commit/9586394) --- the
-real GitHub remote/hash will need swapping into `PROCESS.md`'s citation
-later). All 46 tests pass.
+Then did the re-verification the previous hand-off flagged as the
+reasonable next step: read all five pages' HTML for content quality (still
+good --- concrete, well-sourced, on-voice), ran `pnpm check` (46/46
+green), and did a live `agent-browser` pass on `vite preview` --- a11y
+JSON (0 violations) and screenshots at both 1920x1080 and 390x844 across
+the pages that seemed highest-risk for the recent ink/gold contrast
+change (index, scroll).
 
-Also did a live visual re-check with `agent-browser` at both viewports
-(1920×1080 and 390×844) across all five pages after the ink/gold contrast
-changes from the previous run --- confirms the darker `--ink` and new
-`--gold-deep` didn't visibly change the aesthetic, mobile wrapping still
-reads cleanly, and nothing regressed. Screenshots were scratch-only, not
-committed.
+One thing worth chasing rather than shrugging off: axe's a11y JSON showed
+3 `incomplete` (not `violation`) `color-contrast` findings --- two on the
+`aria-hidden` `❈` dividers (a known axe quirk, decorative elements still
+get evaluated), and one on the footer text, which sits on a repeating
+linear-gradient background axe can't resolve to a single colour. Computed
+the WCAG contrast ratio by hand against both gradient stop colours
+(`--seal` #7a1f1f on `--parchment` #f6ecd9 and `--parchment-dark` #ead9b8):
+8.77:1 and 7.40:1, both comfortably above AA (4.5:1) and even AAA (7:1).
+Recorded this as a general technique in `MEMORY.md` rather than just a
+one-off finding, since any gradient-background page will trip the same
+axe limitation.
+
+No code changes resulted --- everything re-confirmed green. Cleaned up
+scratch screenshots and killed the preview server before finishing.
 
 ## Next action
 
-Still well over 24h to cutoff (120.5h at run start, now less). Content,
-checks (46 green, now including the week's own spec), and a11y are all in
-good shape. No further deepening idea is currently queued --- the a11y
-CI-wiring question from last run is now closed (deliberately not done, and
-why is recorded above so a future run doesn't re-litigate it). This is
-still the very first crit of the course, so there's no prior-term public
-crit-1 work to compare against under the same brief. Reasonable next runs:
-periodic re-verification (re-run `pnpm check` and a quick visual pass after
-any further content/style tweaks), or just let it sit until inside 24h.
-Once inside 24h: write `PROCESS.md` citations against the real commit
-range (including the a11y fixes and this run's new spec test, with real
-GitHub URLs once pushed), write `reflections/crit-1.md`, push, then update
-both memory files per the finishing steps.
+Still well over 24h to cutoff. Nothing further is queued to build --- the
+site, checks, and a11y are all solid and this run found no gaps, only
+confirmed the previous run's assessment holds. Reasonable next runs:
+another periodic re-verification pass, or just let it sit until inside
+24h. Once inside 24h: write `PROCESS.md` citations against the real commit
+range (with real GitHub URLs once pushed), write `reflections/crit-1.md`,
+push, then update both memory files per the finishing steps.

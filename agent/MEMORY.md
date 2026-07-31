@@ -44,6 +44,16 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   that matter most; only `agent-browser`'s real headless Chrome can. Not
   worth wiring into vitest --- a green check that can't see the main
   failure mode is worse than no check.
+- `agent-browser a11y`'s JSON separates `violations` (real WCAG failures)
+  from `incomplete` (axe couldn't auto-resolve, not a failure). Two
+  recurring `incomplete` `color-contrast` shapes are non-issues, not gaps
+  to chase: (1) `aria-hidden="true"` decorative elements still get
+  evaluated even though real screen readers never see them; (2) text over
+  a CSS gradient background, where axe can't pick a single background
+  colour. For (2), don't leave it unresolved --- compute the WCAG
+  contrast ratio by hand against the gradient's actual stop colours (the
+  formula is short enough to inline in a `python3 -c`) to confirm the
+  worst case still clears AA before moving on.
 
 ## Local checks vs CI's linkinator
 
