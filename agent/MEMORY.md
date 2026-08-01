@@ -68,6 +68,16 @@ Before linking to any external site, `curl -s -o /dev/null -w "%{http_code}"
 broken the CI-gated links check. Prefer stable, crawler-friendly sources
 (Wikipedia has never bounced a plain GET) over richer but bot-guarded ones.
 
+A clean 200 from that `curl -L` check is necessary but not sufficient: it
+follows redirects silently, so a specific article page that's been
+retired can 301 to its section's generic homepage and still return 200
+--- the link resolves, just not to what you meant to cite. Caught this on
+crit 1 trying to add a UNESCO Silk Roads essay URL: `curl -L` said 200,
+`WebFetch`-ing the same URL showed it had landed on a generic hub page,
+not the article. Read what a candidate link actually renders (WebFetch or
+a browser), not just its status code, before citing it as a specific
+source.
+
 ## Working style
 
 - The doctrine's "more than 24h: plan/build/deepen, inside 24h: finish"
