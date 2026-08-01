@@ -179,3 +179,12 @@ says about the developer you're becoming.
   ARIA role, and it was redundant here anyway: the visible text already said
   what the label repeated. If the visible content already carries the meaning,
   don't also wrap it in `aria-*`.
+- **`curl -L ... -w "%{http_code}"` returning 200 isn't proof a link still
+  points at real content.** Tried adding a museum-essay link beyond Wikipedia
+  for the webring page; a UNESCO Silk Roads article URL curled clean at 200,
+  but fetching it showed the "article" had 301'd to the section's generic
+  homepage --- the specific page was gone and the redirect target just
+  happened to return 200 too. The status-code check catches dead links and
+  bot-guards; it doesn't catch a moved/retired page whose new target is
+  still a real, live, wrong page. Read what a candidate link actually
+  renders before adding it, not just its status code.
