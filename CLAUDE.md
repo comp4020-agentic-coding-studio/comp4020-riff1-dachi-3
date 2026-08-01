@@ -149,3 +149,33 @@ catching you out, a fact about the stack the agent keeps getting wrong --- write
 it down here. Growing this file is the work of harness engineering, and the gap
 between this boilerplate and your own version is part of what your prototype
 says about the developer you're becoming.
+
+## What this shrine taught the harness
+
+- **No JavaScript is a real constraint, not a style choice.** `spec/crit-1.test.ts`
+  fails the build on any `<script>` tag, any `on*` inline handler, or a shipped
+  `.js` file. That ruled out a client-side visitor counter or a JS-driven
+  ticker; the marquee (`.ticker-track`) and blink effects (`.blink`) in
+  `styles.css` are pure CSS `@keyframes`, and the "PILGRIM No. 004269" counter
+  is a static string, not a live count. Reach for CSS animation before assuming
+  a feature needs a script.
+- **`prefers-reduced-motion` needs a media-query rule of its own, not a lower
+  animation intensity.** `styles.css`'s `@media (prefers-reduced-motion:
+  reduce)` block sets `animation: none` on both the ticker and the blink
+  class. Verified live, not just read from the CSS: `agent-browser set media
+  reduced-motion`, then check `getComputedStyle(el).animationName` on the
+  affected elements actually goes empty.
+- **A colour pair that passes contrast in one role can fail it in the
+  opposite role.** [`ddd0f54`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit1-dachi/commit/ddd0f54)
+  --- the same ink/gold pair used for nav-link text and for ticker text sat at
+  4.33:1 in both places (need 4.5:1 for AA), so one darkened `--ink` fixed
+  both; the subtitle's gold-on-paper pairing was worse (3.72:1) and needed its
+  own `--gold-deep` rather than touching the `--gold` shared with borders and
+  backgrounds. `agent-browser a11y <url> --json` is the sensor that finds
+  these --- none of `pnpm check` does, and they don't look wrong by eye.
+- **`aria-label` on a plain `<p>` is dead weight, not an enhancement.**
+  [`7b33fbc`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit1-dachi/commit/7b33fbc)
+  --- axe-core flags it as unsupported by assistive tech on an element with no
+  ARIA role, and it was redundant here anyway: the visible text already said
+  what the label repeated. If the visible content already carries the meaning,
+  don't also wrap it in `aria-*`.
