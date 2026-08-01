@@ -182,6 +182,25 @@ blockquote {
   font-style: italic;
 }
 
+.guestbook {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guestbook .entry + .entry {
+  margin-top: 1.2rem;
+  border-top: 1px dashed var(--gold);
+  padding-top: 1.2rem;
+}
+
+.entry-meta {
+  margin: 0 0 0.3rem;
+  color: var(--gold-deep);
+  font-family: "Courier New", monospace;
+  font-size: 0.85rem;
+}
+
 footer {
   max-width: 42rem;
   margin: 0 auto 3rem;
