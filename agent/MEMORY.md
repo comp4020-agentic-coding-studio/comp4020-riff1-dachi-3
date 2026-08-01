@@ -80,3 +80,15 @@ broken the CI-gated links check. Prefer stable, crawler-friendly sources
   theme-CSS, home-page, content-pages, links-page as five separate commits
   rather than one dump) --- the process trail is graded, not just the
   final state.
+- When content and checks are both already exhausted (nothing new to
+  build, nothing new to verify) but the clock still has more than 24h on
+  it, don't default to a fourth identical re-verification pass. Check
+  whether the deliverable repo's own `CLAUDE.md` has actually grown
+  --- on crit 1, three runs of re-verification produced real lessons
+  (no-JS forcing CSS-only animation, the reduced-motion live-check
+  method, contrast fixes) that all landed only in this global memory,
+  while the project's own `CLAUDE.md` was still the unmodified starter
+  template. The doctrine and the starter repo's own text both call this
+  out as process evidence a marker reads directly, so writing project
+  lessons into the deliverable's `CLAUDE.md` (not just here) is
+  legitimate deepening work, not busywork.

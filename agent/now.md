@@ -1,43 +1,46 @@
-# Hand-off --- crit 1, third re-verification, still nothing to build
+# Hand-off --- crit 1, harness deepened, still nothing to build in content
 
 ## State
 
-`comp4020-crit1-dachi` unchanged again this run: content-complete, five
-pages, GeoCities-shrine theme, no JS. `git status` clean, nothing
-committed. 96.5h to cutoff at run start; `PROCESS.md` and
-`reflections/crit-1.md` remain templates, deliberately (finishing steps
-are for inside 24h).
+`comp4020-crit1-dachi`: content-complete, five pages, all checks green
+(46/46), working tree clean, one commit ahead of `origin/main` (not yet
+pushed --- pushing is a deliberate step, not automatic). 89.5h to cutoff at
+run start. `PROCESS.md` and `reflections/crit-1.md` remain templates,
+deliberately (finishing steps are for inside 24h).
 
 ## What I did this run
 
-Re-fetched the course source, confirmed unchanged. Ran `pnpm check`
-(46/46 green). The last two runs' a11y sweeps only covered index and
-scroll --- this run covered the three pages they hadn't: `life.html`,
-`fire.html`, `links.html`. All three: 0 violations, 0 incomplete, clean
-at both 1920x1080 and 390x844 (nav wraps to two rows on phone, no
-overflow, text stays legible). `linkinator` on a fresh build: 7 internal
-links, all resolve. The two external Wikipedia links on `links.html`
-(`Dwelling_in_the_Fuchun_Mountains`, `Huang_Gongwang`) both return 200
-with a real UA. Also live-checked the reduced-motion path from the CSS
-(`@media (prefers-reduced-motion: reduce)` at `styles.css:78`, disabling
-the marquee/blink animations): set `agent-browser set media
-reduced-motion`, opened the homepage, and confirmed via
-`getComputedStyle(el).animationName` over every element that nothing has
-an active animation --- the rule actually fires, not just reads correctly.
+Re-fetched the course source (unchanged), re-ran `pnpm check` (still
+46/46 green) and re-read all five pages plus `styles.css` end to end ---
+the content and aesthetic hold up on a fresh read, no new gap found.
 
-No code changes resulted. All scratch screenshots removed, preview server
-killed, working tree confirmed clean before finishing.
+The actual finding this run: `CLAUDE.md` in the deliverable repo was
+still the **unmodified starter template**. Two prior touches to it
+(`80147bf`, `165bbae`) were both convenor/teaching-team edits porting a
+course-wide rename, not anything Dachi wrote. That's a real gap against
+the doctrine's own instruction that this file is process evidence and
+should grow with "a convention to hold the agent to, a sensor that keeps
+catching you out, a fact about the stack the agent keeps getting wrong"
+--- three runs of re-verification had turned up exactly those things
+(no-JS forcing CSS-only animation, the reduced-motion live-check method,
+two AA contrast fixes, one aria-label removal) and none of it had been
+written into the repo's own CLAUDE.md, only into this global memory.
+Added a "What this shrine taught the harness" section citing the real
+commits (`ddd0f54`, `7b33fbc`) and committed it alone
+(`89e5ebf`). Confirmed `pnpm check` still green after.
 
 ## Next action
 
-Every page, every viewport, every link, and the one dynamic CSS rule on
-the site have now each been checked at least once across three runs, all
-green. There is no known gap left to chase --- further re-verification
-runs would be repeating already-covered ground rather than finding
-anything new. Reasonable next runs: let it sit until inside 24h, or if
-picked up again with time to spare, consider deepening content (a sixth
-page? more citations on the webring page?) rather than re-running checks
-that have already passed three times. Once inside 24h: write
-`PROCESS.md` citations against the real commit range (with real GitHub
-URLs once pushed), write `reflections/crit-1.md`, push, then update both
-memory files per the finishing steps.
+Content and checks have each been verified across four runs now; further
+passes over the same ground aren't worth another run. The next genuine
+task, if picked up again with time to spare, is the same call as last
+time: either let it sit, or deepen actual content (a sixth page, e.g. a
+guestbook --- period-authentic and still no-JS --- or more citations on
+the webring page) rather than re-verifying. Growing `CLAUDE.md` with
+project-specific harness lessons (as this run did) is also a legitimate
+use of surplus time once checks and content are both exhausted --- keep
+an eye out for new lessons worth adding there as the week continues, not
+just in this file. Once inside 24h: write `PROCESS.md` citations against
+the real commit range (with real GitHub URLs once pushed, including
+`89e5ebf`), write `reflections/crit-1.md`, push, then update both memory
+files per the finishing steps.
