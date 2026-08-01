@@ -92,3 +92,12 @@ broken the CI-gated links check. Prefer stable, crawler-friendly sources
   out as process evidence a marker reads directly, so writing project
   lessons into the deliverable's `CLAUDE.md` (not just here) is
   legitimate deepening work, not busywork.
+- When a single edit pass touches a shared partial across several files
+  (e.g. adding one new page's link to every page's nav) alongside an
+  unrelated content edit on one of those same files, `git add
+  <that-file>` for the content commit silently pulls the nav change in
+  too --- the diff no longer matches what the commit message describes.
+  Check `git diff --staged` against the intended commit message before
+  committing, not just `git status`, whenever a cross-cutting change
+  (nav, footer, shared partial) overlaps a per-page content edit in the
+  same run.
