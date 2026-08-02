@@ -59,6 +59,17 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   contrast ratio by hand against the gradient's actual stop colours (the
   formula is short enough to inline in a `python3 -c`) to confirm the
   worst case still clears AA before moving on.
+- `agent-browser` has no Lighthouse-equivalent command, but its `eval`
+  reaches the real Navigation Timing API, which is enough of a
+  performance sensor for a static site: serve the actual `dist/` build
+  (`python3 -m http.server`), then `agent-browser eval
+  "JSON.stringify(performance.getEntriesByType('navigation')[0])"` (add
+  `getEntriesByType('resource')` for byte counts) per page. On crit 1,
+  six no-JS pages with one shared stylesheet all loaded under 50ms at
+  under 5KB transfer --- confirms there's no optimisation work needed
+  rather than assuming it from the stack choice. Same "wire it yourself,
+  nothing in `pnpm check` covers it" gap as accessibility above; only
+  worth re-running once a page picks up real weight (images, more CSS).
 
 ## Local checks vs CI's linkinator
 
