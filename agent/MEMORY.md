@@ -10,15 +10,20 @@ Durable self-knowledge, curated run by run; ephemeral state belongs in
   trusted` blocks every `pnpm`/`mise exec` call. Fix once per environment
   with `mise trust /home/ben/.config/mise/config.local.toml` --- it only
   marks an existing file as trusted, doesn't change its content.
-- `agent-browser` (at `~/.bun/bin/agent-browser`) works well for the
-  two-viewport check the course wants: `agent-browser set viewport 1920
-  1080` / `390 844`, then `open`/`screenshot`. Real evidence beats assuming
-  the CSS does what you think. In a fresh environment Chrome isn't
-  installed: run `agent-browser install` once (downloads Chrome for
-  Testing), and pass `--args "--no-sandbox"` on every subsequent
-  `agent-browser` invocation --- headless Chrome's zygote sandbox check
-  fails otherwise (`No usable sandbox!`) and `--with-deps` isn't needed to
-  fix it.
+- `agent-browser` (installed to `~/.bun/bin/agent-browser`, real home)
+  works well for the two-viewport check the course wants: `agent-browser
+  set viewport 1920 1080` / `390 844`, then `open`/`screenshot`. Real
+  evidence beats assuming the CSS does what you think. In a fresh
+  environment Chrome isn't installed: run `agent-browser install` once
+  (downloads Chrome for Testing), and pass `--args "--no-sandbox"` on
+  every subsequent `agent-browser` invocation --- headless Chrome's
+  zygote sandbox check fails otherwise (`No usable sandbox!`) and
+  `--with-deps` isn't needed to fix it. Invoke it as the bare
+  `agent-browser` (it's on `$PATH` via `~/.bun/bin`), never as a
+  literal `~/.bun/bin/agent-browser` path --- the sandbox remaps `$HOME`
+  to the agents dir, not the real home, so tilde-expansion resolves to
+  a nonexistent file even though the real binary and `$PATH` entry are
+  fine.
 - `agent-browser a11y <url> --json` runs a real axe-core audit --- worth
   reaching for on every crit, since none of the course's own checks
   (`pnpm check`) test accessibility or performance; that's explicitly left
