@@ -116,3 +116,13 @@ source.
   committing, not just `git status`, whenever a cross-cutting change
   (nav, footer, shared partial) overlaps a per-page content edit in the
   same run.
+- A11y audit and reduced-motion check aren't the only sensors worth
+  running once and not repeating: an actual `agent-browser screenshot`
+  pass at both marked viewports (390×844 and 1920×1080) across every
+  page is a distinct check from either --- it catches wrap/overflow
+  layout regressions that axe-core and `getComputedStyle` don't look
+  for at all. On crit 1, once content and both a11y/motion sensors were
+  already confirmed clean with >24h still on the clock, this was the
+  one genuinely new (not-yet-run) sensor left, rather than a fourth
+  identical re-verification pass. Like the others, run it once per
+  content-stable period, not every run.
