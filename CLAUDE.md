@@ -188,3 +188,15 @@ says about the developer you're becoming.
   bot-guards; it doesn't catch a moved/retired page whose new target is
   still a real, live, wrong page. Read what a candidate link actually
   renders before adding it, not just its status code.
+- **Performance has no built-in sensor either, and `agent-browser` has no
+  Lighthouse-equivalent command --- but the Navigation Timing API does the
+  job over `agent-browser eval`.** Served the real `dist/` build with
+  `python3 -m http.server` and ran
+  `eval "JSON.stringify(performance.getEntriesByType('navigation')[0])"`
+  (plus `getEntriesByType('resource')` for byte counts) against all six
+  pages. Every page loads in under 50ms with a full transfer size (HTML +
+  shared CSS) under 5KB --- the no-JS constraint and a single small
+  stylesheet make this close to unbeatable without any dedicated
+  optimisation work. Worth re-running only if a page grows real weight
+  (images, more CSS); it's not a sensor that needs repeating on unchanged
+  content.
