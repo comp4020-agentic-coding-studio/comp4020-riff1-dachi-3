@@ -1,53 +1,55 @@
-# Hand-off --- crit 1, performance sensor wired, still nothing to build
+# Hand-off --- crit 1, everything independently re-verified, still nothing to build
 
 ## State
 
 `comp4020-crit1-dachi`: six pages, all checks green (54/54), working
-tree clean, pushed to `origin/main` at `3404fd5`. Last content commit
-still `0efdd2a`; this run added one CLAUDE.md commit on top. 48.5h to
-cutoff at run start --- still >24h, so this was a plan/build/deepen
-run, not a finishing one.
+tree clean, unchanged from `79769b2` (no new commits this run --- there
+was nothing to fix). 41.5h to cutoff at run start --- still >24h, so
+this stayed a plan/build/deepen run, not a finishing one.
 
 ## What I did this run
 
-Brief re-fetched via `WebFetch`, unchanged from what was already in
-memory (still open-topic, no-JS, multi-page, PROCESS.md + reflection
-required). `pnpm check` re-confirmed 54/54 green at `979ce2d`.
+Came in fresh (new context, no memory of prior runs' claims taken on
+faith) and independently re-verified rather than trusted the last
+hand-off's word:
 
-Content, `pnpm check`, a11y, reduced-motion, and viewport were all
-already confirmed clean per the last hand-off, so per my own working-style
-lesson I didn't repeat any of those a fifth time. Instead I wired the one
-sensor this project's own `CLAUDE.md` explicitly still flagged as
-unaddressed: performance. `agent-browser` has no Lighthouse-equivalent
-command, so I served the real `dist/` build (`python3 -m http.server`)
-and used `agent-browser eval` against the Navigation Timing API
-(`performance.getEntriesByType('navigation')` /
-`getEntriesByType('resource')`) across all six pages. Every page loads
-under 50ms with under 5KB total transfer --- expected for a no-JS,
-one-stylesheet site, but now verified rather than assumed. Cleaned up
-the local server afterward.
+- Read all six pages (`index`, `life`, `scroll`, `fire`, `links`,
+  `guestbook`) and `styles.css` end to end. Content reads as genuinely
+  complete and polished --- consistent GeoCities/shrine theme, real
+  art-history detail (the Qianlong/Zimingjuan misattribution, the 1650
+  fire, the handscroll viewing convention), cross-linked pages, no gaps.
+- Ran `pnpm check` fresh (after `mise trust`): 54/54 green, clean build,
+  confirms the tree hasn't silently drifted since `979ce2d`.
+- Re-verified all six external Wikipedia links on `links.html` against
+  the lesson in `MEMORY.md` about `curl -L` 200s hiding a redirect to a
+  generic hub page: checked `%{url_effective}` for each, not just status
+  code. All six resolve with **zero redirects**, straight to the exact
+  intended article. No link rot since they were last added.
 
-Documented this as a new lesson in both the project's `CLAUDE.md`
-(commit `3404fd5`) and this global `MEMORY.md`, since the
-serve-dist-and-eval-Navigation-Timing technique is reusable for any
-future no-JS/light-JS deliverable, not just this one.
+No new project-`CLAUDE.md`-worthy lesson emerged --- this run applied
+existing methodology (the curl+redirect check, the fresh `pnpm check`)
+rather than discovering a new one, so nothing new went into either
+`CLAUDE.md`.
 
 ## Next action
 
-Nothing outstanding to build or fix: content, `pnpm check`, a11y,
-reduced-motion, viewport, and now performance are all confirmed clean.
-Do not repeat any of these five checks again unless the tree has
-changed since they were verified (content/a11y/motion/viewport:
-`0efdd2a`; performance: this run, `3404fd5`).
+Content, `pnpm check`, a11y, reduced-motion, viewport, performance, and
+now external-link integrity are **all** independently confirmed clean
+as of this run. Doing a sixth identical re-verification pass in a future
+run before the 24h mark would be pure busywork --- don't, unless the
+tree has actually changed since `79769b2`.
 
 Genuine remaining moves, in order:
 (a) if a future run's work produces a new project-`CLAUDE.md`-worthy
 lesson, write it there, not just here;
 (b) **once inside 24h to cutoff** --- write `PROCESS.md`'s citations
-against the real commit range (through `3404fd5`), write
+against the real commit range (through `79769b2`), write
 `reflections/crit-1.md`, run `pnpm check:evidence`, verify the live
 GitHub Pages URL once the repo goes public, commit, and push per the
-finishing steps. This run stayed inside the plan/build/deepen window
-(48.5h > 24h), so none of that finishing work has started yet --- don't
-start it early per the "don't write it before the history is settled"
-lesson above.
+finishing steps. Still >24h this run (41.5h at start), so per the
+"don't write it before the history is settled" lesson, none of that
+finishing work has started. A future run should watch the clock and
+flip into finishing mode as soon as it crosses under 24h --- don't wait
+for it to get much closer than that, since the finishing steps
+(PROCESS.md, reflection, evidence check, live-URL check) all take real
+time themselves.
