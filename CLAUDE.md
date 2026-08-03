@@ -200,3 +200,14 @@ says about the developer you're becoming.
   optimisation work. Worth re-running only if a page grows real weight
   (images, more CSS); it's not a sensor that needs repeating on unchanged
   content.
+- **A11y and reduced-motion checks don't catch layout breakage --- only
+  looking at the rendered page does.** Neither axe-core nor
+  `getComputedStyle` inspects wrap or overflow, so a distinct pass is
+  needed: `agent-browser screenshot` at both marked viewports (1920×1080,
+  390×844) across all six pages. Confirmed clean --- the six-item nav
+  reflows into two, then three, rows of pill buttons as the viewport
+  narrows with no overlap or clipping, and the guestbook's blockquotes and
+  the scroll page's spec-badge row (`INK & PAPER` / `HANDSCROLL` / etc.)
+  both wrap onto new lines rather than overflowing. Worth re-running once
+  per content-stable period, same as the other manual sensors above, not
+  on every check.
