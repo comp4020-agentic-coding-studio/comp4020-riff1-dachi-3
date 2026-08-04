@@ -1,73 +1,54 @@
 # Process overview
 
-<!-- TEMPLATE: this file is a shape to fill in, not a form. Replace everything
-     in it with your own overview, and delete this comment — `pnpm
-     check:evidence` will remind you if it's still here. -->
-
-A reading-guide to how the work came together --- a map to your process, not an
-essay about it. Markers read this file and follow its citations; they don't
-trawl the repo for evidence you didn't point at, so if a moment mattered, cite
-it.
-
 ## What I built
 
-One paragraph: the thing, and the idea behind it.
+A shrine to Huang Gongwang (黄公望) and *Dwelling in the Fuchun Mountains*: six
+plain HTML/CSS pages --- home, his life, the 1650 fire that split the scroll
+in two, the scroll itself, a webring linking out to real scholarship, and a
+guestbook --- styled as a parchment-and-seal-red devotional page, the "bygone
+web era" look built around a genuine art-history obsession rather than filler
+content.
 
 ## The moments that mattered
 
-Three or four for an assignment; fewer is fine for a weekly prototype. Keep the
-list short so each moment has room to do all four jobs:
+1. **No JavaScript turned out to be a real constraint, not a style note.**
+   The starter template ships a small TS/JS scaffold; the brief's "HTML and
+   CSS only" line meant deleting it outright and re-deriving effects (the
+   ticker marquee, the blink accents) as pure CSS `@keyframes` instead of
+   script-driven behaviour. I wrote a project-specific spec check
+   (`spec/crit-1.test.ts`) that fails the build on any `<script>` tag, inline
+   `on*` handler, or shipped `.js` file, so the constraint is enforced rather
+   than just remembered.
+   [`9586394`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit1-dachi/commit/9586394),
+   [`0a34b86`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit1-dachi/commit/0a34b86)
 
-1. **what happened** --- the problem, or the thing the agent got wrong
-2. **what you did instead of the obvious thing** --- the call you made, and why
-   it beat the obvious one
-3. **how you knew it was right** --- the check you ran, the viewport you looked
-   at, what you read before accepting the diff
-4. **the citation** --- a commit or commit range, a `CLAUDE.md` change, a check
-   that went from red to green, a prompt paired with the commit it produced
+2. **Accessibility has no built-in sensor here, so I wired one myself and it
+   found real bugs.** None of `pnpm check` tests contrast or ARIA correctness.
+   Running `agent-browser a11y --json` against the live build caught the
+   ink/gold colour pair failing WCAG AA in *two* different roles (nav text and
+   ticker text, both 4.33:1 against a 4.5:1 bar) and an `aria-label` on a plain
+   `<p>` that axe-core flags as dead weight on an element with no ARIA role.
+   Both looked fine by eye; neither would have shipped clean without the
+   sensor.
+   [`ddd0f54`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit1-dachi/commit/ddd0f54),
+   [`7b33fbc`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit1-dachi/commit/7b33fbc)
 
-Jobs 2 and 3 are the ones the repo can't tell a reader on its own, so they're
-where the marks are. At least one moment should be a correction you fixed at the
-**harness** level --- a rule added to `CLAUDE.md`, a check wired up, an attempt
-thrown away --- rather than a re-prompt.
+3. **A green link check isn't proof a link points where you meant.** Adding an
+   external citation to the webring page, `curl -L -w "%{http_code}"` returned
+   a clean 200 for a museum-essay URL --- but reading what the page actually
+   rendered (not just its status code) showed it had silently 301'd to a
+   generic section homepage, the specific article having been retired. I
+   swapped it for a stable Wikipedia link and wrote the check-order lesson
+   into `CLAUDE.md` so it isn't relearned next time: curl for reachability,
+   then read the actual rendered content before citing it.
+   [`272479d`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit1-dachi/commit/272479d),
+   [`9efdb85`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit1-dachi/commit/9efdb85)
 
-Cite each moment as a link whose text is the commit hash or range and whose
-target is this repo's commit or compare URL, so a reader clicks straight to the
-evidence:
-
-- one commit: [`a1b2c3d`](https://github.com/YOUR-ORG/YOUR-REPO/commit/a1b2c3d)
-- a range:
-  [`a1b2c3d...e4f5a6b`](https://github.com/YOUR-ORG/YOUR-REPO/compare/a1b2c3d...e4f5a6b)
-
-To pair a prompt with the commit it produced, quote the prompt (curated, not a
-full transcript) next to the citation:
-
-> the prompt, verbatim
-
-Screenshots are welcome where one carries the verification better than a
-sentence does. Commit the file to this repo and link it with a **relative**
-path, which is what makes it render on GitHub: `![alt text](docs/before.png)`.
-Images don't count towards the word count and don't replace the citation.
-
-### A worked moment, for shape
-
-Delete this section along with the rest of the boilerplate --- it's here to show
-the four jobs in one paragraph, not to be imitated in content.
-
-> The date formatter kept coming back with `toLocaleDateString()` and no locale
-> argument, so the same build rendered differently on my machine and in CI. I'd
-> already re-prompted it twice, which fixed the line but not the habit, so the
-> third time I put the rule in `CLAUDE.md` instead
-> ([`3f9ac21`](https://github.com/YOUR-ORG/YOUR-REPO/commit/3f9ac21)) and added
-> a spec test that fails on a bare `toLocaleDateString`. That's what told me it
-> had actually taken: the test went red against the old code and green against
-> the new, and the next two features it wrote passed it without prompting
-> ([`3f9ac21...b7e0d14`](https://github.com/YOUR-ORG/YOUR-REPO/compare/3f9ac21...b7e0d14)).
-
-## Before you ship
-
-`pnpm check:evidence` verifies your citations resolve to real commits and your
-relative image paths exist, before a marker ever opens the file.
-It checks that your map is traceable, not that it is good: the marker judges
-whether your small, deliberately chosen set of moments shows real judgement and
-reflection. A green check is not a substitute for that curation.
+4. **Performance also has no sensor in `pnpm check`, and `agent-browser` has
+   no Lighthouse equivalent --- so I reached for the Navigation Timing API
+   directly.** Served the real `dist/` build locally and ran
+   `agent-browser eval "JSON.stringify(performance.getEntriesByType('navigation')[0])"`
+   against all six pages: every page loads under 50ms with under 5KB
+   transferred, confirming the no-JS, single-stylesheet approach pays off
+   without any dedicated optimisation work.
+   [`3404fd5`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit1-dachi/commit/3404fd5)
